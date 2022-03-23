@@ -10,7 +10,6 @@ def get_target_price(ticker, k):
     df = pyupbit.get_ohlcv(ticker, interval="day", count=2)
     target_price = df.iloc[0]['close'] + (df.iloc[0]['high'] - df.iloc[0]['low']) * k
     return target_price
-    
 
 def get_start_time(ticker):
     """시작 시간 조회"""
@@ -44,7 +43,6 @@ while True:
         start_time = get_start_time("KRW-SAND")
         end_time = start_time + datetime.timedelta(days=1)
 
-        # 9:00 < 현재 < #08:59:50
         if start_time < now < end_time - datetime.timedelta(seconds=10):
             target_price = get_target_price("KRW-SAND", 0.6)
             current_price = get_current_price("KRW-SAND")
@@ -53,13 +51,10 @@ while True:
                 if krw > 5000:
                     upbit.buy_market_order("KRW-SAND", krw*0.9995)
         else:
-            SAND = get_balance("SAND")
-            if SAND > 0.00008:
-                upbit.sell_market_order("KRW-SAND", SAND*0.9995)
+            sand = get_balance("SAND")
+            if sand > 0.00008:
+                upbit.sell_market_order("KRW-SAND", sand*0.9995)
         time.sleep(1)
     except Exception as e:
         print(e)
         time.sleep(1)
-
-
-        
